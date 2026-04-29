@@ -1,6 +1,6 @@
 # 프로젝트명
 
-Campus Market for Students
+대학생 중고거래 웹페이지
 
 ## 팀 구성원
 
