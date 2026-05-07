@@ -85,3 +85,7 @@
 - Git
 - GitHub
 
+### 화면설계
+<img width="1536" height="1024" alt="0b547c92-e5fa-47b5-83b7-3d2cb36873a0" src="https://github.com/user-attachments/assets/8a81d5ed-b22b-4e66-a286-295303f7e608" />
+
+
