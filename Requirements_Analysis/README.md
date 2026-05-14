@@ -99,16 +99,6 @@ products 테이블
 | status      | 판매중/예약중/거래완료 |
 | created_at  | 등록일          |
 
-transactions 테이블
-| 필드명            | 설명       |
-| -------------- | -------- |
-| transaction_id | 거래 고유 ID |
-| product_id     | 상품 ID    |
-| seller_id      | 판매자 ID   |
-| buyer_id       | 구매자 ID   |
-| status         | 거래 상태    |
-| created_at     | 거래 생성일   |
-
 
 
 
