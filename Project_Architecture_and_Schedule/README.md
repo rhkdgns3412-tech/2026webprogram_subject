@@ -1,8 +1,8 @@
-# 프로젝트 구조
+# Project_Structure
 
-## 프로젝트 구조 (기능 분리 MVC)
+## 프로젝트 디렉토리 구조 (기능 분리 MVC)
 
-아래 2개 기능을 각각 독립적인 MVC 구조로 분리한다.
+Requirements_Analysis 문서를 기준으로, 아래 2개 기능을 각각 독립적인 MVC 구조로 분리한다.
 
 1. 회원/후기/평점 관리 기능
 2. 상품관리 기능
@@ -130,29 +130,69 @@ product-management/
 │           ├─ product-create.jsp
 │           ├─ product-edit.jsp
 │           └─ product-search.jsp
-└─  webapp/
-    ├─ member/
-    ├─ review/
-    └─ product/
-sql
-├─ users.sql
-├─ reviews.sql
-└─ product.sql
+├─ webapp/
+  ├─ index.jsp (메인페이지)
+  ├─ assets/
+  │  ├─ css/
+  │  │  └─ main.css
+  │  ├─ js/
+  │  │  └─ main.js
+  │  └─ images/
+  ├─ member/
+  ├─ review/
+  └─ product/
+sql/
+ ├─ users.sql
+ ├─ reviews.sql
+ └─ product.sql
 ```
+
+---
+
+## 3) 메인페이지 구조 (MVC 미사용)
+
+- 사용 테이블: 없음 (데이터 접근 없음)
+
+```text
+webapp/
+├─ index.jsp (메인페이지)
+├─ assets/
+│  ├─ css/
+│  │  └─ main.css
+│  ├─ js/
+│  │  └─ main.js
+│  └─ images/
+└─ (메인 진입점)
+```
+
+### 역할
+- View: 각 기능(회원/후기/평점, 상품관리)으로 이동할 수 있는 링크 제공
+- Assets: 메인페이지 디자인(CSS, JavaScript, 이미지)
+
+### 메인페이지 역할
+메인페이지는 단순 정적 페이지로, 다음 모듈로의 접근 링크만 제공:
+- 회원/후기/평점 모듈: `/member/login.jsp`, `/member/register.jsp` (로그인, 회원가입 등)
+- 상품관리 모듈: `/product/product-list.jsp` (상품 목록, 검색 등)
+
+---
+
+위 구조를 사용하면 문서 디렉토리와 기능 구현 디렉토리를 함께 관리하면서, 회원/후기/평점 기능과 상품관리 기능을 서로 독립적인 MVC로 유지하고, 메인페이지는 각 모듈의 진입점 역할을 할 수 있다.
 
 # 팀 역할 분담
 ## 윤광훈(팀장)
 - 상품관리기능 구현
 - product db 구현
-- merge 관리
+- 메인페이지 구현 및 각모듈 통합
 ## 조유나
 - 회원/후기/평점 관리 기능  구현
 - users,reviews db구현 
+- 
 
 # 일정
 ## 1주차
 - 상품관리기능,회원/후기/평점 관리기능 구현 및 db작성
 ## 2주차
-- 각모듈 통합 테스트 및 부트스트랩으로 프론트엔드 구현
+- 프론트엔드 구현 및 부트스트랩 적용
 ## 3주차
+- 메인페이지 작성 이후 각 모듈 통합
 - 테스트 이후 버그수정
