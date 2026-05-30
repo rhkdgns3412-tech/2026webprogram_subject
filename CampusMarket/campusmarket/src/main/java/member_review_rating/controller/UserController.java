@@ -89,7 +89,7 @@ public class UserController extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/member/mypage");
         } else {
             request.setAttribute("errorMessage", "로그인 정보가 올바르지 않습니다.");
-            request.getRequestDispatcher("/member/login.jsp").forward(request, response);
+            request.getRequestDispatcher("/member/login").forward(request, response);
         }
     }
 }

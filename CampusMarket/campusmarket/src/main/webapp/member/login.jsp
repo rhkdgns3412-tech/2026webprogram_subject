@@ -11,7 +11,7 @@
 <% if (errorMessage != null) { %>
     <p style="color:red;"><%= errorMessage %></p>
 <% } %>
-<form action="login" method="post">
+<form action="<%= request.getContextPath() %>/member/login" method="post">
     <label for="username">아이디</label><br>
     <input type="text" id="username" name="username" required maxlength="50"><br><br>
 

@@ -5,16 +5,16 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBUtil {
-    private static final String DRIVER_CLASS = "com.mysql.cj.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://localhost:3306/campusmarket?useSSL=false&serverTimezone=UTC";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "password";
+    private static final String DRIVER_CLASS = "org.h2.Driver";
+    private static final String URL = "jdbc:h2:~/campusmarket;MODE=MySQL;AUTO_SERVER=TRUE";
+    private static final String USERNAME = "sa";
+    private static final String PASSWORD = "";
 
     static {
         try {
             Class.forName(DRIVER_CLASS);
         } catch (ClassNotFoundException e) {
-            throw new ExceptionInInitializerError("MySQL JDBC Driver loading failed: " + e.getMessage());
+            throw new ExceptionInInitializerError("H2 JDBC Driver loading failed: " + e.getMessage());
         }
     }
 

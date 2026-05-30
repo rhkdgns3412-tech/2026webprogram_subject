@@ -22,6 +22,6 @@
     <li>이메일: <%= loginUser.getEmail() %></li>
     <li>가입일: <%= loginUser.getCreatedAt() %></li>
 </ul>
-<p><a href="logout">로그아웃</a></p>
+<p><a href="<%= request.getContextPath() %>/member/logout">로그아웃</a>
 </body>
 </html>
