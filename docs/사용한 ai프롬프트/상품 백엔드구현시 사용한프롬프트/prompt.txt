@@ -1,0 +1,12 @@
+상품수정에서는 status값도 바꿀수있도록 수정해줘로컬폴더의 C:\xampp\mysql 위치를 참고해서
+Product_db데이터베이스의 product 테이블을 찾아줘
+
+.Product디렉토리 안에있는 image.png 파일은 프로젝트의 UML구조야 참고해서 구현해줘 또한 Product클래스를 전에말한 product테이블과 연결해줘
+
+상품등록시 사용자
+db의 컬럼 중 status와 created_at을 제외한 모든걸 등록하게 바꿔줘
+
+product_id는 상품명
+title은 제목
+
+상품수정에서는 status값도 바꿀수있도록 수정해줘
