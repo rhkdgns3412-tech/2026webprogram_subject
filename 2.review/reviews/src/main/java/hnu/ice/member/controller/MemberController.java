@@ -40,6 +40,7 @@ public class MemberController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
         if (action == null) {
             response.sendRedirect(request.getContextPath() + "/index.jsp");
@@ -60,8 +61,6 @@ public class MemberController extends HttpServlet {
     }
 
     private void handleRegister(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        request.setCharacterEncoding("UTF-8");
-
         String userId = request.getParameter("userId");
         String password = request.getParameter("password");
         String nickname = request.getParameter("nickname");
@@ -82,8 +81,6 @@ public class MemberController extends HttpServlet {
     }
 
     private void handleLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        request.setCharacterEncoding("UTF-8");
-
         String userId = request.getParameter("userId");
         String password = request.getParameter("password");
 

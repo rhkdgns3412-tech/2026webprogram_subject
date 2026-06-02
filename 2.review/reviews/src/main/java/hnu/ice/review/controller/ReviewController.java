@@ -41,6 +41,7 @@ public class ReviewController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
         if (action == null) {
             response.sendRedirect(request.getContextPath() + "/index.jsp");
@@ -64,7 +65,6 @@ public class ReviewController extends HttpServlet {
     }
 
     private void handleWrite(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("loginUser") == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
