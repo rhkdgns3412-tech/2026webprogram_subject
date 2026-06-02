@@ -71,21 +71,25 @@ public class ReviewController extends HttpServlet {
             return;
         }
 
-        String writerId = (String) session.getAttribute("loginUser");
-        String targetUserId = request.getParameter("targetUserId");
-        int rating = Integer.parseInt(request.getParameter("rating"));
-        String content = request.getParameter("content");
-        String createdAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        try {
+            String writerId = (String) session.getAttribute("loginUser");
+            String targetUserId = request.getParameter("targetUserId");
+            int rating = Integer.parseInt(request.getParameter("rating"));
+            String content = request.getParameter("content");
+            String createdAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-        Review review = new Review();
-        review.setWriterId(writerId);
-        review.setTargetUserId(targetUserId);
-        review.setRating(rating);
-        review.setContent(content);
-        review.setCreatedAt(createdAt);
+            Review review = new Review();
+            review.setWriterId(writerId);
+            review.setTargetUserId(targetUserId);
+            review.setRating(rating);
+            review.setContent(content);
+            review.setCreatedAt(createdAt);
 
-        reviewDao.addReview(review);
-        response.sendRedirect(request.getContextPath() + "/review?action=list");
+            reviewDao.addReview(review);
+            response.sendRedirect(request.getContextPath() + "/review?action=list");
+        } catch (NumberFormatException e) {
+            response.sendRedirect(request.getContextPath() + "/review-write.jsp?error=1");
+        }
     }
 
     private void handleDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -95,8 +99,12 @@ public class ReviewController extends HttpServlet {
             return;
         }
 
-        int reviewId = Integer.parseInt(request.getParameter("reviewId"));
-        reviewDao.deleteReview(reviewId);
-        response.sendRedirect(request.getContextPath() + "/review?action=list");
+        try {
+            int reviewId = Integer.parseInt(request.getParameter("reviewId"));
+            reviewDao.deleteReview(reviewId);
+            response.sendRedirect(request.getContextPath() + "/review?action=list");
+        } catch (NumberFormatException e) {
+            response.sendRedirect(request.getContextPath() + "/review?action=list");
+        }
     }
 }

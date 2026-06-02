@@ -20,6 +20,11 @@
 <body>
   <div class="container">
     <h1>회원가입</h1>
+    <% if (request.getParameter("error") != null) { %>
+      <div style="margin-top: 12px; padding: 12px; background: #fee; border: 1px solid #fcc; color: #c00; border-radius: 4px;">
+        회원가입에 실패했습니다. 이미 존재하는 아이디이거나 입력값을 다시 확인해주세요.
+      </div>
+    <% } %>
     <form action="${pageContext.request.contextPath}/member?action=register" method="post">
       <label for="userId">아이디</label>
       <input type="text" id="userId" name="userId" required maxlength="50" />

@@ -68,11 +68,15 @@ public class MemberController extends HttpServlet {
         String email = request.getParameter("email");
 
         Member member = new Member(userId, password, nickname, email);
-        boolean success = memberDao.register(member);
-
-        if (success) {
-            response.sendRedirect(request.getContextPath() + "/login.jsp");
-        } else {
+        try {
+            boolean success = memberDao.register(member);
+            if (success) {
+                response.sendRedirect(request.getContextPath() + "/login.jsp");
+            } else {
+                response.sendRedirect(request.getContextPath() + "/register.jsp?error=1");
+            }
+        } catch (RuntimeException e) {
+            // 중복 가입 또는 기타 DB 오류
             response.sendRedirect(request.getContextPath() + "/register.jsp?error=1");
         }
     }

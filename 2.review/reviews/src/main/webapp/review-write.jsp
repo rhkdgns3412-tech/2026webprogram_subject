@@ -27,6 +27,11 @@
 <body>
   <div class="container">
     <h1>리뷰 작성</h1>
+    <% if (request.getParameter("error") != null) { %>
+      <div style="margin-top: 12px; padding: 12px; background: #fee; border: 1px solid #fcc; color: #c00; border-radius: 4px;">
+        리뷰 작성에 실패했습니다. 입력값을 확인해주세요.
+      </div>
+    <% } %>
     <p>작성자: <strong><%= loginUser %></strong></p>
     <form action="${pageContext.request.contextPath}/review?action=write" method="post">
       <label for="targetUserId">대상 사용자 아이디</label>
