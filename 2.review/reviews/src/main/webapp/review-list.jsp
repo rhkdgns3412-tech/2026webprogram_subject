@@ -1,4 +1,17 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" import="java.util.List, hnu.ice.review.model.Review" %>
+<%!
+  String generateStars(int rating) {
+    StringBuilder stars = new StringBuilder();
+    for (int i = 1; i <= 5; i++) {
+      if (i <= rating) {
+        stars.append("★");
+      } else {
+        stars.append("☆");
+      }
+    }
+    return stars.toString();
+  }
+%>
 <%
   List<Review> reviews = (List<Review>) request.getAttribute("reviews");
   if (reviews == null) {
@@ -58,7 +71,7 @@
           <td><%= review.getReviewId() %></td>
           <td><%= review.getWriterId() %></td>
           <td><%= review.getTargetUserId() %></td>
-          <td><%= review.getRating() %></td>
+          <td><%= generateStars(review.getRating()) %> <%= review.getRating() %>점</td>
           <td><%= review.getContent() %></td>
           <td><%= review.getCreatedAt() %></td>
           <td><a href="<%= request.getContextPath() %>/review?action=delete&reviewId=<%= review.getReviewId() %>">삭제</a></td>
