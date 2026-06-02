@@ -60,7 +60,7 @@ public class ReviewController extends HttpServlet {
     private void handleList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Review> reviews = reviewDao.getAllReviews();
         request.setAttribute("reviews", reviews);
-        request.getRequestDispatcher("/review/list.jsp").forward(request, response);
+        request.getRequestDispatcher("/review-list.jsp").forward(request, response);
     }
 
     private void handleWrite(HttpServletRequest request, HttpServletResponse response) throws IOException {

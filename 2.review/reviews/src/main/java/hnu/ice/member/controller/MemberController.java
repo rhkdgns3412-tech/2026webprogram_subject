@@ -109,9 +109,11 @@ public class MemberController extends HttpServlet {
         }
 
         String userId = (String) session.getAttribute("loginUser");
+        Member member = memberDao.getMember(userId);
         double averageRating = reviewDao.getAverageRating(userId);
         int reviewCount = reviewDao.getReviewCount(userId);
 
+        request.setAttribute("member", member);
         request.setAttribute("averageRating", averageRating);
         request.setAttribute("reviewCount", reviewCount);
         request.getRequestDispatcher("/mypage.jsp").forward(request, response);
