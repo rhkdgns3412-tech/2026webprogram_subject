@@ -4,3 +4,10 @@
 <img width="843" height="611" alt="23132131231" src="https://github.com/user-attachments/assets/58cf18f3-2001-42c5-a26f-a8a8daa236f4" />
 <img width="992" height="544" alt="eqewrw" src="https://github.com/user-attachments/assets/c96baeea-435b-492f-9b84-ffe3c2c68c3e" />
 <img width="844" height="660" alt="2312321111" src="https://github.com/user-attachments/assets/d6d3d335-7e77-46e6-98a5-db5b26cd9046" />
+리뷰작성목록
+<img width="1047" height="463" alt="g해결" src="https://github.com/user-attachments/assets/c91c0e6a-1e02-4b11-b6d1-4eada32d6522" />
+
+평가를 받으면 마이페이지의 나의 평점이 업데이트됩니다
+<img width="716" height="632" alt="9878978798" src="https://github.com/user-attachments/assets/c209e56c-af3d-4eba-8403-39ea347e4fcc" />
+
+
