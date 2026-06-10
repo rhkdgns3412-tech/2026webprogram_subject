@@ -5,6 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Project Hub</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="<%= request.getContextPath() %>/assets/product.css">
 	<style>
 		.hero-grid {
@@ -42,9 +43,9 @@
 			line-height: 1.6;
 		}
 	</style>
-</head>
+	</head>
 <body>
-<div class="page-shell">
+<div class="page-shell container py-4">
 	<section class="hero">
 		<span class="eyebrow">Project Hub</span>
 		<h1>상품 모듈과 리뷰 모듈로 바로 이동하는 시작 화면</h1>
@@ -56,32 +57,36 @@
 		</div>
 	</section>
 
+	</section>
 	<section class="panel">
-		<div class="hero-grid">
-			<div class="link-card">
-				<div class="badge">1.Product JSP</div>
-				<h2 class="section-title">상품 모듈</h2>
-				<p class="section-subtitle">상품 등록, 목록, 검색, 상세 화면으로 바로 이동합니다.</p>
-				<div class="link-list">
-					<a href="<%= request.getContextPath() %>/product?action=list">product-list.jsp</a>
-					<a href="<%= request.getContextPath() %>/product?action=create">product-create.jsp</a>
-					<a href="<%= request.getContextPath() %>/product?action=search">product-search.jsp</a>
+		<div class="row g-4">
+			<div class="col-md-6">
+				<div class="card p-3 h-100">
+					<div class="badge">1.Product JSP</div>
+					<h2 class="section-title">상품 모듈</h2>
+					<p class="section-subtitle">상품 등록, 목록, 검색, 상세 화면으로 바로 이동합니다.</p>
+					<div class="d-flex flex-wrap gap-2">
+						<a class="btn btn-outline-primary" href="<%= request.getContextPath() %>/product?action=list">product-list.jsp</a>
+						<a class="btn btn-outline-primary" href="<%= request.getContextPath() %>/product?action=create">product-create.jsp</a>
+						<a class="btn btn-outline-primary" href="<%= request.getContextPath() %>/product?action=search">product-search.jsp</a>
+					</div>
+					<div class="helper-small mt-2">상세와 수정은 목록 화면에서 개별 상품을 선택하면 열립니다.</div>
 				</div>
-				<div class="helper-small">상세와 수정은 목록 화면에서 개별 상품을 선택하면 열립니다.</div>
 			</div>
-
-			<div class="link-card">
-				<div class="badge">2.review JSP</div>
-				<h2 class="section-title">리뷰 모듈</h2>
-				<p class="section-subtitle">리뷰 앱은 별도 프로젝트라서 리뷰용 JSP 진입 경로를 함께 제공합니다.</p>
-				<div class="link-list">
-					<a href="/reviews/login.jsp">login.jsp</a>
-					<a href="/reviews/register.jsp">register.jsp</a>
-					<a href="/reviews/mypage.jsp">mypage.jsp</a>
-					<a href="/reviews/review-list.jsp">review-list.jsp</a>
-					<a href="/reviews/review-write.jsp">review-write.jsp</a>
+			<div class="col-md-6">
+				<div class="card p-3 h-100">
+					<div class="badge">2.review JSP</div>
+					<h2 class="section-title">리뷰 모듈</h2>
+					<p class="section-subtitle">리뷰 앱은 별도 프로젝트라서 리뷰용 JSP 진입 경로를 함께 제공합니다.</p>
+					<div class="d-flex flex-wrap gap-2">
+						<a class="btn btn-outline-secondary" href="/reviews/login.jsp">login.jsp</a>
+						<a class="btn btn-outline-secondary" href="/reviews/register.jsp">register.jsp</a>
+						<a class="btn btn-outline-secondary" href="/reviews/mypage.jsp">mypage.jsp</a>
+						<a class="btn btn-outline-secondary" href="/reviews/review-list.jsp">review-list.jsp</a>
+						<a class="btn btn-outline-secondary" href="/reviews/review-write.jsp">review-write.jsp</a>
+					</div>
+					<div class="helper-small mt-2">review 프로젝트가 같은 톰캣에 /reviews 컨텍스트로 배포되어 있어야 정상 동작합니다.</div>
 				</div>
-				<div class="helper-small">review 프로젝트가 같은 톰캣에 /reviews 컨텍스트로 배포되어 있어야 정상 동작합니다.</div>
 			</div>
 		</div>
 	</section>

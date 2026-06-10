@@ -9,10 +9,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>상품 상세</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<%= request.getContextPath() %>/assets/product.css">
 </head>
 <body>
-<div class="page-shell">
+<div class="page-shell container py-4">
     <section class="hero">
         <span class="eyebrow">상품 상세</span>
         <h1 class="section-title">상품 정보를 한눈에 확인하세요</h1>
@@ -27,20 +28,21 @@
 
     <% if (product != null) { %>
     <section class="panel detail-layout">
-        <div class="detail-image">
+        <div class="row">
+            <div class="col-md-5 detail-image mb-3">
             <% if (product.getImageUrl() != null && !product.getImageUrl().trim().isEmpty()) { %>
-            <img src="<%= product.getImageUrl() %>" alt="<%= product.getTitle() == null ? "상품 이미지" : product.getTitle() %>">
+            <img src="<%= product.getImageUrl() %>" alt="<%= product.getTitle() == null ? "상품 이미지" : product.getTitle() %>" class="img-fluid rounded">
             <% } else { %>
-            <div class="detail-placeholder">
+            <div class="detail-placeholder p-4 text-center" style="background:#f8f9fa; border-radius:8px;">
                 <div>
-                    <div class="badge is-muted">No image</div>
-                    <p class="preview-note">첨부된 상품 이미지가 없습니다.</p>
+                    <div class="badge bg-secondary text-light">No image</div>
+                    <p class="preview-note mt-2">첨부된 상품 이미지가 없습니다.</p>
                 </div>
             </div>
             <% } %>
-        </div>
+            </div>
 
-        <div class="detail-card">
+            <div class="col-md-7 detail-card">
             <div class="stack">
                 <div class="badge-row">
                     <span class="badge"><%= product.getStatus() == null ? "판매중" : product.getStatus() %></span>
@@ -74,9 +76,10 @@
                 <div class="description-box"><%= product.getDescription() == null || product.getDescription().trim().isEmpty() ? "상품 설명이 없습니다." : product.getDescription() %></div>
             </div>
 
-            <div class="detail-actions">
-                <a class="btn btn-primary" href="<%= request.getContextPath() %>/product?action=edit&productId=<%= product.getProductId() %>">상품 수정</a>
-                <a class="btn btn-secondary" href="<%= request.getContextPath() %>/product?action=delete&productId=<%= product.getProductId() %>" onclick="return confirm('삭제하시겠습니까?');">상품 삭제</a>
+                <div class="detail-actions mt-3">
+                    <a class="btn btn-primary" href="<%= request.getContextPath() %>/product?action=edit&productId=<%= product.getProductId() %>">상품 수정</a>
+                    <a class="btn btn-danger" href="<%= request.getContextPath() %>/product?action=delete&productId=<%= product.getProductId() %>" onclick="return confirm('삭제하시겠습니까?');">상품 삭제</a>
+                </div>
             </div>
         </div>
     </section>

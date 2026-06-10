@@ -12,14 +12,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>상품 목록</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<%= request.getContextPath() %>/assets/product.css">
 </head>
 <body>
-<div class="page-shell">
+<div class="page-shell container py-4">
     <section class="hero">
         <span class="eyebrow">상품 목록</span>
-        <h1 class="section-title">등록된 상품들을 카드로 확인하세요</h1>
-        <p class="section-subtitle">이미지, 제목, 가격, 거래 상태를 한 화면에서 비교할 수 있도록 구성했습니다.</p>
         <div class="hero-actions">
             <a class="btn btn-primary" href="<%= request.getContextPath() %>/product?action=create">상품 등록</a>
             <a class="btn btn-secondary" href="<%= request.getContextPath() %>/product?action=search">상품 검색</a>
@@ -27,7 +26,7 @@
         </div>
     </section>
 
-    <section class="toolbar">
+    <section class="toolbar mb-3">
         <div class="badge-row">
             <span class="chip">총 <%= products.size() %>개 상품</span>
             <span class="chip is-muted">이미지 첨부 지원</span>
@@ -44,44 +43,44 @@
             } else {
                 for (Product product : products) {
         %>
-        <article class="product-card">
-            <div class="product-thumb">
-                <% if (product.getImageUrl() != null && !product.getImageUrl().trim().isEmpty()) { %>
-                <img src="<%= product.getImageUrl() %>" alt="<%= product.getTitle() == null ? "상품 이미지" : product.getTitle() %>">
-                <% } else { %>
-                <div class="thumb-placeholder">
-                    <div>
-                        <div class="badge is-muted">No image</div>
-                        <p class="preview-note">이미지 첨부가 아직 없습니다.</p>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <% if (product.getImageUrl() != null && !product.getImageUrl().trim().isEmpty()) { %>
+                        <img src="<%= product.getImageUrl() %>" class="card-img-top" alt="<%= product.getTitle() == null ? "상품 이미지" : product.getTitle() %>">
+                    <% } else { %>
+                        <div class="card-img-top d-flex align-items-center justify-content-center" style="height:180px; background:#f8f9fa;">
+                            <div>
+                                <div class="badge bg-secondary text-light">No image</div>
+                                <p class="preview-note">이미지 없음</p>
+                            </div>
+                        </div>
+                    <% } %>
+                    <div class="card-body">
+                        <div class="mb-2">
+                            <span class="badge bg-primary"><%= product.getStatus() == null ? "판매중" : product.getStatus() %></span>
+                            <span class="badge bg-secondary"><%= product.getCategory() == null ? "미분류" : product.getCategory() %></span>
+                        </div>
+                        <h5 class="card-title"><%= product.getTitle() == null ? "상품명 없음" : product.getTitle() %></h5>
+                        <p class="card-text fw-bold"><%= product.getPrice() %>원</p>
+                        <p class="card-text text-muted">판매자 <strong><%= product.getSellerId() == null ? "-" : product.getSellerId() %></strong></p>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a class="btn btn-sm btn-outline-primary" href="<%= request.getContextPath() %>/product?action=detail&productId=<%= product.getProductId() %>">상세</a>
+                        <a class="btn btn-sm btn-outline-secondary" href="<%= request.getContextPath() %>/product?action=edit&productId=<%= product.getProductId() %>">수정</a>
+                        <a class="btn btn-sm btn-danger" href="<%= request.getContextPath() %>/product?action=delete&productId=<%= product.getProductId() %>" onclick="return confirm('삭제하시겠습니까?');">삭제</a>
                     </div>
                 </div>
-                <% } %>
             </div>
-            <div class="card-body">
-                <div class="badge-row">
-                    <span class="badge"><%= product.getStatus() == null ? "판매중" : product.getStatus() %></span>
-                    <span class="badge is-muted"><%= product.getCategory() == null ? "미분류" : product.getCategory() %></span>
-                </div>
-                <div>
-                    <h2 class="card-title"><%= product.getTitle() == null ? "상품명 없음" : product.getTitle() %></h2>
-                    <div class="price"><%= product.getPrice() %>원</div>
-                </div>
-                <div class="meta">
-                    판매자 <strong><%= product.getSellerId() == null ? "-" : product.getSellerId() %></strong><br>
-                    등록일 <%= product.getCreatedAt() == null ? "-" : product.getCreatedAt() %>
-                </div>
-                <div class="card-actions">
-                    <a class="btn btn-secondary" href="<%= request.getContextPath() %>/product?action=detail&productId=<%= product.getProductId() %>">상세</a>
-                    <a class="btn btn-secondary" href="<%= request.getContextPath() %>/product?action=edit&productId=<%= product.getProductId() %>">수정</a>
-                    <a class="btn btn-danger" href="<%= request.getContextPath() %>/product?action=delete&productId=<%= product.getProductId() %>" onclick="return confirm('삭제하시겠습니까?');">삭제</a>
-                </div>
-            </div>
-        </article>
+        </div>
         <%
                 }
             }
         %>
     </section>
+</div>
+</body>
+</html>
 </div>
 </body>
 </html>

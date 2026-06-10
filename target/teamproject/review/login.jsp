@@ -1,0 +1,40 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>로그인</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
+    .container { max-width: 480px; margin: 60px auto; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+    h1 { margin-top: 0; font-size: 24px; }
+    label { display: block; margin-top: 16px; color: #333; }
+    input { width: 100%; padding: 10px; margin-top: 6px; border: 1px solid #ccc; border-radius: 4px; }
+    .actions { margin-top: 24px; }
+    .button { padding: 10px 16px; border: none; border-radius: 4px; background: #333; color: #fff; cursor: pointer; }
+    .button:hover { background: #000; }
+    .message { margin-top: 16px; color: #c00; }
+    .link { display: block; margin-top: 12px; color: #555; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>로그인</h1>
+    <form action="${pageContext.request.contextPath}/member?action=login" method="post">
+      <label for="userId">아이디</label>
+      <input type="text" id="userId" name="userId" required maxlength="50" />
+
+      <label for="password">비밀번호</label>
+      <input type="password" id="password" name="password" required maxlength="100" />
+
+      <div class="actions">
+        <button type="submit" class="button">로그인</button>
+      </div>
+    </form>
+    <% if (request.getParameter("error") != null) { %>
+      <div class="message">로그인 정보가 올바르지 않습니다.</div>
+    <% } %>
+    <a class="link" href="${pageContext.request.contextPath}/register.jsp">회원가입하기</a>
+  </div>
+</body>
+</html>

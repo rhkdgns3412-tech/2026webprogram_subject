@@ -13,10 +13,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>상품 검색</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<%= request.getContextPath() %>/assets/product.css">
 </head>
 <body>
-<div class="page-shell">
+<div class="page-shell container py-4">
     <section class="hero">
         <span class="eyebrow">상품 검색</span>
         <h1 class="section-title">원하는 상품을 빠르게 찾아보세요</h1>
@@ -28,9 +29,9 @@
     </section>
 
     <section class="panel">
-        <form class="search-bar" action="<%= request.getContextPath() %>/product" method="get">
+        <form class="search-bar d-flex" action="<%= request.getContextPath() %>/product" method="get">
             <input type="hidden" name="action" value="search">
-            <input type="text" name="keyword" value="<%= keyword == null ? "" : keyword %>" placeholder="제목, 카테고리, 설명 검색">
+            <input type="text" name="keyword" value="<%= keyword == null ? "" : keyword %>" placeholder="제목, 카테고리, 설명 검색" class="form-control me-2">
             <button class="btn btn-primary" type="submit">검색</button>
         </form>
     </section>
@@ -52,40 +53,41 @@
             } else {
                 for (Product product : products) {
         %>
-        <article class="product-card">
-            <div class="product-thumb">
-                <% if (product.getImageUrl() != null && !product.getImageUrl().trim().isEmpty()) { %>
-                <img src="<%= product.getImageUrl() %>" alt="<%= product.getTitle() == null ? "상품 이미지" : product.getTitle() %>">
-                <% } else { %>
-                <div class="thumb-placeholder">
-                    <div>
-                        <div class="badge is-muted">No image</div>
-                        <p class="preview-note">첨부된 이미지가 없습니다.</p>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <% if (product.getImageUrl() != null && !product.getImageUrl().trim().isEmpty()) { %>
+                        <img src="<%= product.getImageUrl() %>" class="card-img-top" alt="<%= product.getTitle() == null ? "상품 이미지" : product.getTitle() %>">
+                    <% } else { %>
+                        <div class="card-img-top d-flex align-items-center justify-content-center" style="height:180px; background:#f8f9fa;">
+                            <div>
+                                <div class="badge bg-secondary text-light">No image</div>
+                                <p class="preview-note">이미지 없음</p>
+                            </div>
+                        </div>
+                    <% } %>
+                    <div class="card-body">
+                        <div class="mb-2">
+                            <span class="badge bg-primary"><%= product.getStatus() == null ? "판매중" : product.getStatus() %></span>
+                            <span class="badge bg-secondary"><%= product.getCategory() == null ? "미분류" : product.getCategory() %></span>
+                        </div>
+                        <h5 class="card-title"><%= product.getTitle() == null ? "상품명 없음" : product.getTitle() %></h5>
+                        <p class="card-text fw-bold"><%= product.getPrice() %>원</p>
+                        <p class="card-text text-muted">상품 ID <strong><%= product.getProductId() %></strong></p>
+                        <a class="btn btn-sm btn-outline-primary" href="<%= request.getContextPath() %>/product?action=detail&productId=<%= product.getProductId() %>">상세</a>
+                        <a class="btn btn-sm btn-outline-secondary" href="<%= request.getContextPath() %>/product?action=edit&productId=<%= product.getProductId() %>">수정</a>
                     </div>
                 </div>
-                <% } %>
             </div>
-            <div class="card-body">
-                <div class="badge-row">
-                    <span class="badge"><%= product.getStatus() == null ? "판매중" : product.getStatus() %></span>
-                    <span class="badge is-muted"><%= product.getCategory() == null ? "미분류" : product.getCategory() %></span>
-                </div>
-                <div>
-                    <h2 class="card-title"><%= product.getTitle() == null ? "상품명 없음" : product.getTitle() %></h2>
-                    <div class="price"><%= product.getPrice() %>원</div>
-                </div>
-                <div class="meta">상품 ID <strong><%= product.getProductId() %></strong></div>
-                <div class="card-actions">
-                    <a class="btn btn-secondary" href="<%= request.getContextPath() %>/product?action=detail&productId=<%= product.getProductId() %>">상세</a>
-                    <a class="btn btn-secondary" href="<%= request.getContextPath() %>/product?action=edit&productId=<%= product.getProductId() %>">수정</a>
-                </div>
-            </div>
-        </article>
+        </div>
         <%
                 }
             }
         %>
     </section>
+</div>
+</body>
+</html>
 </div>
 </body>
 </html>
