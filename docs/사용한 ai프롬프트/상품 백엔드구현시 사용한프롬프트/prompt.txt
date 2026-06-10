@@ -10,3 +10,5 @@ product_id는 상품명
 title은 제목
 
 상품수정에서는 status값도 바꿀수있도록 수정해줘
+
+SQL DB는 직접구현,

@@ -2,6 +2,8 @@ package kr.hnu.ice.product.dao;
 
 import kr.hnu.ice.product.model.Product;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -9,15 +11,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class ProductDao {
-    private static final String[] DB_NAMES = {"Product_db", "pruduct_db"};
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "";
-    private static final String URL_PATTERN = "jdbc:mysql://localhost:3306/%s?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&useSSL=false";
+    private static final String DEFAULT_DB_NAME = "Product_db";
+    private static final String FALLBACK_DB_NAME = "pruduct_db";
+    private static final String DEFAULT_DB_HOST = "localhost";
+    private static final String DEFAULT_DB_PORT = "3306";
+    private static final String DEFAULT_DB_USER = "root";
+    private static final String DEFAULT_DB_PASSWORD = "";
+    private static final String CONFIG_FILE = "db.properties";
+    private static final String URL_PATTERN = "jdbc:mysql://%s:%s/%s?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&useSSL=false";
 
     private Connection conn;
     private PreparedStatement pstat;
+    private final Properties dbProperties;
 
     public ProductDao() {
         try {
@@ -25,24 +33,64 @@ public class ProductDao {
         } catch (ClassNotFoundException e) {
             throw new IllegalStateException("MySQL JDBC 드라이버를 찾을 수 없습니다.", e);
         }
+
+        dbProperties = loadDbProperties();
     }
 
     public void connect() {
         if (conn != null) {
-            return;
+            try {
+                if (!conn.isClosed()) {
+                    return;
+                }
+            } catch (SQLException ignored) {
+            }
         }
 
+        String host = resolveSetting("product.db.host", "PRODUCT_DB_HOST", dbProperties.getProperty("db.host", DEFAULT_DB_HOST));
+        String port = resolveSetting("product.db.port", "PRODUCT_DB_PORT", dbProperties.getProperty("db.port", DEFAULT_DB_PORT));
+        String user = resolveSetting("product.db.user", "PRODUCT_DB_USER", dbProperties.getProperty("db.user", DEFAULT_DB_USER));
+        String password = resolveSetting("product.db.password", "PRODUCT_DB_PASSWORD", dbProperties.getProperty("db.password", DEFAULT_DB_PASSWORD));
+        String configuredDbName = resolveSetting("product.db.name", "PRODUCT_DB_NAME", dbProperties.getProperty("db.name", DEFAULT_DB_NAME));
+
         SQLException lastException = null;
-        for (String dbName : DB_NAMES) {
+        for (String dbName : new String[] {configuredDbName, DEFAULT_DB_NAME, FALLBACK_DB_NAME}) {
             try {
-                conn = DriverManager.getConnection(String.format(URL_PATTERN, dbName), DB_USER, DB_PASSWORD);
+                conn = DriverManager.getConnection(String.format(URL_PATTERN, host, port, dbName), user, password);
                 return;
             } catch (SQLException e) {
                 lastException = e;
             }
         }
 
-        throw new IllegalStateException("Product_db 또는 pruduct_db에 연결할 수 없습니다.", lastException);
+        throw new IllegalStateException("Product_db에 연결할 수 없습니다. MySQL 서버가 실행 중인지, db.properties의 설정이 맞는지 확인하세요.", lastException);
+    }
+
+    private Properties loadDbProperties() {
+        Properties properties = new Properties();
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(CONFIG_FILE)) {
+            if (inputStream != null) {
+                properties.load(inputStream);
+            }
+        } catch (IOException e) {
+            throw new IllegalStateException("DB 설정 파일을 읽을 수 없습니다.", e);
+        }
+
+        return properties;
+    }
+
+    private String resolveSetting(String systemPropertyName, String envName, String defaultValue) {
+        String value = System.getProperty(systemPropertyName);
+        if (value != null && !value.trim().isEmpty()) {
+            return value.trim();
+        }
+
+        value = System.getenv(envName);
+        if (value != null && !value.trim().isEmpty()) {
+            return value.trim();
+        }
+
+        return defaultValue;
     }
 
     public void close() {
