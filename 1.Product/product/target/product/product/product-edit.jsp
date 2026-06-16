@@ -16,8 +16,8 @@
 <div class="page-shell container py-4">
     <section class="hero">
         <span class="eyebrow">상품 수정</span>
-        <h1 class="section-title">상품 정보와 이미지를 함께 갱신하세요</h1>
-        <p class="section-subtitle">상품 ID는 고정하고, 제목·가격·상태·이미지 파일만 교체하는 흐름으로 수정 화면을 구성했습니다.</p>
+        <h1 class="section-title">상품 정보를 수정하세요</h1>
+        <p class="section-subtitle">상품 ID는 고정하고, 제목·가격·상태·설명만 갱신하는 흐름으로 수정 화면을 구성했습니다.</p>
         <div class="hero-actions">
             <a class="btn btn-secondary" href="<%= request.getContextPath() %>/product?action=list">목록으로</a>
             <% if (product != null) { %>
@@ -29,11 +29,10 @@
     <% if (product != null) { %>
     <section class="panel form-layout">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-12">
                 <form class="form-card" action="<%= request.getContextPath() %>/product?action=edit" method="post" enctype="multipart/form-data">
             <div class="stack">
                 <h2 class="form-title">상품 정보</h2>
-                <p class="field-hint">상품 이미지를 새로 선택하지 않으면 기존 이미지가 유지됩니다.</p>
             </div>
 
                     <div class="form-grid">
@@ -76,30 +75,25 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="imageFile" class="form-label">상품 이미지 교체</label>
-                            <input id="imageFile" type="file" name="imageFile" accept="image/*" class="form-control">
-                        </div>
-                        <div class="mb-3">
                             <label for="description" class="form-label">설명</label>
                             <textarea id="description" name="description" rows="8" placeholder="상품 설명을 입력하세요." class="form-control"><%= product.getDescription() == null ? "" : product.getDescription() %></textarea>
                         </div>
+                        <div class="mb-3">
+                            <label for="productImage" class="form-label">상품 사진 교체</label>
+                            <input id="productImage" type="file" name="productImage" accept="image/*" class="form-control">
+                            <div class="form-text">새 파일을 올리면 기존 사진을 교체하고, 비워두면 기존 사진을 유지합니다.</div>
+                        </div>
+                        <% if (product.getImagePath() != null && !product.getImagePath().trim().isEmpty()) { %>
+                        <div class="preview-image mb-3">
+                            <img src="<%= request.getContextPath() %>/<%= product.getImagePath() %>" alt="현재 상품 사진">
+                        </div>
+                        <% } %>
                     </div>
                     <div class="form-actions mt-3 d-flex gap-2">
                         <button class="btn btn-primary" type="submit">수정하기</button>
                         <a class="btn btn-secondary" href="<%= request.getContextPath() %>/product?action=detail&productId=<%= product.getProductId() %>">취소</a>
                     </div>
                 </form>
-            </div>
-            <div class="col-md-4">
-                <aside class="preview-image">
-                    <div class="preview-placeholder" id="editPreviewPlaceholder" style="<%= (product.getImageUrl() == null || product.getImageUrl().trim().isEmpty()) ? "display:grid;" : "display:none;" %>">
-                        <div>
-                            <div class="badge is-muted">Current image</div>
-                            <p class="preview-note">새 파일을 고르면 아래 미리보기가 교체됩니다.</p>
-                        </div>
-                    </div>
-                    <img id="editPreviewImage" alt="상품 이미지 미리보기" src="<%= product.getImageUrl() == null ? "" : product.getImageUrl() %>" style="<%= (product.getImageUrl() == null || product.getImageUrl().trim().isEmpty()) ? "display:none;" : "display:block;" %>" class="img-fluid rounded">
-                </aside>
             </div>
         </div>
 
@@ -110,40 +104,5 @@
     </section>
     <% } %>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    (function () {
-        var input = document.getElementById('imageFile');
-        var previewImage = document.getElementById('editPreviewImage');
-        var placeholder = document.getElementById('editPreviewPlaceholder');
-
-        if (!input || !previewImage || !placeholder) {
-            return;
-        }
-
-        input.addEventListener('change', function () {
-            var file = this.files && this.files[0];
-            if (!file) {
-                if (previewImage.getAttribute('src')) {
-                    placeholder.style.display = 'none';
-                    previewImage.style.display = 'block';
-                } else {
-                    previewImage.style.display = 'none';
-                    placeholder.style.display = 'grid';
-                }
-                return;
-            }
-
-            var reader = new FileReader();
-            reader.onload = function (event) {
-                previewImage.src = event.target.result;
-                previewImage.style.display = 'block';
-                placeholder.style.display = 'none';
-            };
-            reader.readAsDataURL(file);
-        });
-    }());
-</script>
 </body>
 </html>

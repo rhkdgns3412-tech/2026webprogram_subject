@@ -7,20 +7,21 @@ public class Product {
     private int price;
     private String category;
     private String description;
+    private String imagePath;
     private String status;
     private String createdAt;
-    private String imageUrl;
 
     public Product() {
     }
 
-    public Product(String productId, String sellerId, String title, int price, String category, String description, String status, String createdAt) {
+    public Product(String productId, String sellerId, String title, int price, String category, String description, String imagePath, String status, String createdAt) {
         this.productId = productId;
         this.sellerId = sellerId;
         this.title = title;
         this.price = price;
         this.category = category;
         this.description = description;
+        this.imagePath = imagePath;
         this.status = status;
         this.createdAt = createdAt;
     }
@@ -73,6 +74,14 @@ public class Product {
         this.description = description;
     }
 
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -87,13 +96,5 @@ public class Product {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
     }
 }

@@ -5,6 +5,10 @@
     if (products == null) {
         products = java.util.Collections.emptyList();
     }
+    
+    List<String> categories = (List<String>) request.getAttribute("categories");
+    String currentCategory = (String) request.getAttribute("category");
+    String currentSort = (String) request.getAttribute("sort");
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -19,6 +23,7 @@
 <div class="page-shell container py-4">
     <section class="hero">
         <span class="eyebrow">상품 목록</span>
+        <h1>캠퍼스 중고 장터</h1>
         <div class="hero-actions">
             <a class="btn btn-primary" href="<%= request.getContextPath() %>/product?action=create">상품 등록</a>
             <a class="btn btn-secondary" href="<%= request.getContextPath() %>/product?action=search">상품 검색</a>
@@ -26,12 +31,42 @@
         </div>
     </section>
 
-    <section class="toolbar mb-3">
-        <div class="badge-row">
-            <span class="chip">총 <%= products.size() %>개 상품</span>
-            <span class="chip is-muted">이미지 첨부 지원</span>
-        </div>
-        <a class="btn btn-secondary" href="<%= request.getContextPath() %>/product?action=create">새 상품 등록</a>
+    <%-- 필터 및 정렬 툴바 --%>
+    <section class="panel mb-4">
+        <form action="<%= request.getContextPath() %>/product" method="get" class="row g-3 align-items-end">
+            <input type="hidden" name="action" value="list">
+            
+            <%-- 카테고리 필터 --%>
+            <div class="col-md-4">
+                <label for="category" class="form-label fw-bold">카테고리</label>
+                <select name="category" id="category" class="form-select" onchange="this.form.submit()">
+                    <option value="전체" <%= (currentCategory == null || "전체".equals(currentCategory)) ? "selected" : "" %>>전체 카테고리</option>
+                    <%
+                        if (categories != null) {
+                            for (String cat : categories) {
+                    %>
+                        <option value="<%= cat %>" <%= cat.equals(currentCategory) ? "selected" : "" %>><%= cat %></option>
+                    <%
+                            }
+                        }
+                    %>
+                </select>
+            </div>
+
+            <%-- 가격순 정렬 --%>
+            <div class="col-md-4">
+                <label for="sort" class="form-label fw-bold">정렬 기준</label>
+                <select name="sort" id="sort" class="form-select" onchange="this.form.submit()">
+                    <option value="latest" <%= (currentSort == null || "latest".equals(currentSort)) ? "selected" : "" %>>최신 등록순</option>
+                    <option value="price_asc" <%= "price_asc".equals(currentSort) ? "selected" : "" %>>가격 낮은순</option>
+                    <option value="price_desc" <%= "price_desc".equals(currentSort) ? "selected" : "" %>>가격 높은순</option>
+                </select>
+            </div>
+
+            <div class="col-md-4 text-end">
+                <span class="badge bg-light text-dark border p-2">총 <%= products.size() %>개 상품</span>
+            </div>
+        </form>
     </section>
 
     <section class="grid">
@@ -46,16 +81,13 @@
         <div class="row">
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
-                    <% if (product.getImageUrl() != null && !product.getImageUrl().trim().isEmpty()) { %>
-                        <img src="<%= product.getImageUrl() %>" class="card-img-top" alt="<%= product.getTitle() == null ? "상품 이미지" : product.getTitle() %>">
-                    <% } else { %>
-                        <div class="card-img-top d-flex align-items-center justify-content-center" style="height:180px; background:#f8f9fa;">
-                            <div>
-                                <div class="badge bg-secondary text-light">No image</div>
-                                <p class="preview-note">이미지 없음</p>
-                            </div>
-                        </div>
-                    <% } %>
+                    <div class="product-thumb">
+                        <% if (product.getImagePath() != null && !product.getImagePath().trim().isEmpty()) { %>
+                        <img src="<%= request.getContextPath() %>/<%= product.getImagePath() %>" alt="<%= product.getTitle() == null ? "상품 사진" : product.getTitle() %>">
+                        <% } else { %>
+                        <div class="thumb-placeholder">등록된 사진이 없습니다.</div>
+                        <% } %>
+                    </div>
                     <div class="card-body">
                         <div class="mb-2">
                             <span class="badge bg-primary"><%= product.getStatus() == null ? "판매중" : product.getStatus() %></span>
@@ -77,10 +109,8 @@
                 }
             }
         %>
+        
     </section>
-</div>
-</body>
-</html>
 </div>
 </body>
 </html>

@@ -26,6 +26,7 @@ public class ProductDao {
     private Connection conn;
     private PreparedStatement pstat;
     private final Properties dbProperties;
+    private boolean schemaChecked;
 
     public ProductDao() {
         try {
@@ -41,6 +42,7 @@ public class ProductDao {
         if (conn != null) {
             try {
                 if (!conn.isClosed()) {
+                    ensureSchema();
                     return;
                 }
             } catch (SQLException ignored) {
@@ -57,6 +59,7 @@ public class ProductDao {
         for (String dbName : new String[] {configuredDbName, DEFAULT_DB_NAME, FALLBACK_DB_NAME}) {
             try {
                 conn = DriverManager.getConnection(String.format(URL_PATTERN, host, port, dbName), user, password);
+                ensureSchema();
                 return;
             } catch (SQLException e) {
                 lastException = e;
@@ -93,6 +96,24 @@ public class ProductDao {
         return defaultValue;
     }
 
+    private void ensureSchema() throws SQLException {
+        if (schemaChecked || conn == null) {
+            return;
+        }
+
+        final String sql = "SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'product' AND COLUMN_NAME = 'image_path'";
+        try (PreparedStatement statement = conn.prepareStatement(sql);
+             ResultSet rs = statement.executeQuery()) {
+            if (rs.next() && rs.getInt(1) == 0) {
+                try (java.sql.Statement alterStatement = conn.createStatement()) {
+                    alterStatement.executeUpdate("ALTER TABLE product ADD COLUMN image_path VARCHAR(255) NULL AFTER category");
+                }
+            }
+        }
+
+        schemaChecked = true;
+    }
+
     public void close() {
         if (pstat != null) {
             try {
@@ -114,7 +135,7 @@ public class ProductDao {
     }
 
     public void addProduct(Product product) {
-        final String sql = "INSERT INTO product (product_id, seller_id, title, description, price, category) VALUES (?, ?, ?, ?, ?, ?)";
+        final String sql = "INSERT INTO product (product_id, seller_id, title, description, price, category, image_path) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try {
             connect();
             pstat = conn.prepareStatement(sql);
@@ -124,6 +145,7 @@ public class ProductDao {
             pstat.setString(4, product.getDescription());
             pstat.setInt(5, product.getPrice());
             pstat.setString(6, product.getCategory());
+            pstat.setString(7, product.getImagePath());
             pstat.executeUpdate();
         } catch (SQLException e) {
             throw new IllegalStateException("상품 등록에 실패했습니다.", e);
@@ -133,7 +155,7 @@ public class ProductDao {
     }
 
     public List<Product> getAll() {
-        final String sql = "SELECT product_id, seller_id, title, description, price, category, status, created_at FROM product ORDER BY created_at DESC, product_id DESC";
+        final String sql = "SELECT product_id, seller_id, title, description, price, category, image_path, status, created_at FROM product ORDER BY created_at DESC, product_id DESC";
         List<Product> productList = new ArrayList<>();
 
         try {
@@ -153,8 +175,63 @@ public class ProductDao {
         return productList;
     }
 
+    public List<Product> getProducts(String category, String sortOrder) {
+        StringBuilder sql = new StringBuilder("SELECT product_id, seller_id, title, description, price, category, image_path, status, created_at FROM product");
+        boolean hasCategory = category != null && !category.trim().isEmpty() && !"전체".equals(category);
+
+        if (hasCategory) {
+            sql.append(" WHERE category = ?");
+        }
+
+        if ("price_asc".equals(sortOrder)) {
+            sql.append(" ORDER BY price ASC");
+        } else if ("price_desc".equals(sortOrder)) {
+            sql.append(" ORDER BY price DESC");
+        } else {
+            sql.append(" ORDER BY created_at DESC, product_id DESC");
+        }
+
+        List<Product> productList = new ArrayList<>();
+        try {
+            connect();
+            pstat = conn.prepareStatement(sql.toString());
+            if (hasCategory) {
+                pstat.setString(1, category);
+            }
+            try (ResultSet rs = pstat.executeQuery()) {
+                while (rs.next()) {
+                    productList.add(mapRow(rs));
+                }
+            }
+        } catch (SQLException e) {
+            throw new IllegalStateException("상품 목록 조회에 실패했습니다.", e);
+        } finally {
+            close();
+        }
+        return productList;
+    }
+
+    public List<String> getCategories() {
+        final String sql = "SELECT DISTINCT category FROM product WHERE category IS NOT NULL AND category <> '' ORDER BY category ASC";
+        List<String> categories = new ArrayList<>();
+        try {
+            connect();
+            pstat = conn.prepareStatement(sql);
+            try (ResultSet rs = pstat.executeQuery()) {
+                while (rs.next()) {
+                    categories.add(rs.getString(1));
+                }
+            }
+        } catch (SQLException e) {
+            throw new IllegalStateException("카테고리 목록 조회에 실패했습니다.", e);
+        } finally {
+            close();
+        }
+        return categories;
+    }
+
     public Product getProduct(String productId) {
-        final String sql = "SELECT product_id, seller_id, title, description, price, category, status, created_at FROM product WHERE product_id = ?";
+        final String sql = "SELECT product_id, seller_id, title, description, price, category, image_path, status, created_at FROM product WHERE product_id = ?";
 
         try {
             connect();
@@ -175,7 +252,7 @@ public class ProductDao {
     }
 
     public void updateProduct(Product product) {
-        final String sql = "UPDATE product SET seller_id = ?, title = ?, description = ?, price = ?, category = ?, status = ? WHERE product_id = ?";
+        final String sql = "UPDATE product SET seller_id = ?, title = ?, description = ?, price = ?, category = ?, image_path = ?, status = ? WHERE product_id = ?";
         try {
             connect();
             pstat = conn.prepareStatement(sql);
@@ -184,8 +261,9 @@ public class ProductDao {
             pstat.setString(3, product.getDescription());
             pstat.setInt(4, product.getPrice());
             pstat.setString(5, product.getCategory());
-            pstat.setString(6, product.getStatus());
-            pstat.setString(7, product.getProductId());
+            pstat.setString(6, product.getImagePath());
+            pstat.setString(7, product.getStatus());
+            pstat.setString(8, product.getProductId());
             pstat.executeUpdate();
         } catch (SQLException e) {
             throw new IllegalStateException("상품 수정에 실패했습니다.", e);
@@ -209,7 +287,7 @@ public class ProductDao {
     }
 
     public List<Product> searchProduct(String keyword) {
-        final String sql = "SELECT product_id, seller_id, title, description, price, category, status, created_at FROM product WHERE title LIKE ? OR category LIKE ? OR description LIKE ? ORDER BY created_at DESC, product_id DESC";
+        final String sql = "SELECT product_id, seller_id, title, description, price, category, image_path, status, created_at FROM product WHERE title LIKE ? OR category LIKE ? OR description LIKE ? ORDER BY created_at DESC, product_id DESC";
         List<Product> productList = new ArrayList<>();
 
         try {
@@ -241,6 +319,7 @@ public class ProductDao {
                 rs.getInt("price"),
                 rs.getString("category"),
                 rs.getString("description"),
+                rs.getString("image_path"),
                 rs.getString("status"),
                 rs.getString("created_at")
         );

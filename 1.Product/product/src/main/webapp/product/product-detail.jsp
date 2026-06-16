@@ -17,7 +17,7 @@
     <section class="hero">
         <span class="eyebrow">상품 상세</span>
         <h1 class="section-title">상품 정보를 한눈에 확인하세요</h1>
-        <p class="section-subtitle">이미지, 상태, 가격, 설명을 카드형 레이아웃으로 정리했습니다.</p>
+        <p class="section-subtitle">상태, 가격, 설명을 카드형 레이아웃으로 정리했습니다.</p>
         <div class="detail-actions">
             <a class="btn btn-secondary" href="<%= request.getContextPath() %>/product?action=list">목록</a>
             <% if (product != null) { %>
@@ -29,20 +29,14 @@
     <% if (product != null) { %>
     <section class="panel detail-layout">
         <div class="row">
-            <div class="col-md-5 detail-image mb-3">
-            <% if (product.getImageUrl() != null && !product.getImageUrl().trim().isEmpty()) { %>
-            <img src="<%= product.getImageUrl() %>" alt="<%= product.getTitle() == null ? "상품 이미지" : product.getTitle() %>" class="img-fluid rounded">
+            <div class="col-12 detail-card">
+            <% if (product.getImagePath() != null && !product.getImagePath().trim().isEmpty()) { %>
+            <div class="detail-image mb-4">
+                <img src="<%= request.getContextPath() %>/<%= product.getImagePath() %>" alt="<%= product.getTitle() == null ? "상품 사진" : product.getTitle() %>">
+            </div>
             <% } else { %>
-            <div class="detail-placeholder p-4 text-center" style="background:#f8f9fa; border-radius:8px;">
-                <div>
-                    <div class="badge bg-secondary text-light">No image</div>
-                    <p class="preview-note mt-2">첨부된 상품 이미지가 없습니다.</p>
-                </div>
-            </div>
+            <div class="detail-placeholder mb-4">등록된 상품 사진이 없습니다.</div>
             <% } %>
-            </div>
-
-            <div class="col-md-7 detail-card">
             <div class="stack">
                 <div class="badge-row">
                     <span class="badge"><%= product.getStatus() == null ? "판매중" : product.getStatus() %></span>

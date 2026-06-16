@@ -56,16 +56,13 @@
         <div class="row">
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
-                    <% if (product.getImageUrl() != null && !product.getImageUrl().trim().isEmpty()) { %>
-                        <img src="<%= product.getImageUrl() %>" class="card-img-top" alt="<%= product.getTitle() == null ? "상품 이미지" : product.getTitle() %>">
-                    <% } else { %>
-                        <div class="card-img-top d-flex align-items-center justify-content-center" style="height:180px; background:#f8f9fa;">
-                            <div>
-                                <div class="badge bg-secondary text-light">No image</div>
-                                <p class="preview-note">이미지 없음</p>
-                            </div>
-                        </div>
-                    <% } %>
+                    <div class="product-thumb">
+                        <% if (product.getImagePath() != null && !product.getImagePath().trim().isEmpty()) { %>
+                        <img src="<%= request.getContextPath() %>/<%= product.getImagePath() %>" alt="<%= product.getTitle() == null ? "상품 사진" : product.getTitle() %>">
+                        <% } else { %>
+                        <div class="thumb-placeholder">등록된 사진이 없습니다.</div>
+                        <% } %>
+                    </div>
                     <div class="card-body">
                         <div class="mb-2">
                             <span class="badge bg-primary"><%= product.getStatus() == null ? "판매중" : product.getStatus() %></span>
@@ -85,9 +82,6 @@
             }
         %>
     </section>
-</div>
-</body>
-</html>
 </div>
 </body>
 </html>
