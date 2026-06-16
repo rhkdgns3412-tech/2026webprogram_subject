@@ -159,3 +159,39 @@ JSP/Servlet 기반 Web Model2(MVC) 구조의 중고거래 플랫폼에서, 내�
 - 회원가입 → 로그인 → 후기 → 평점 흐름 테스트
 - 중복 후기 방지 및 접근 제한 확인
 - DAO 분리, SQL 집계 함수 활용
+
+상품수정에서는 status값도 바꿀수있도록 수정해줘로컬폴더의 C:\xampp\mysql 위치를 참고해서
+Product_db데이터베이스의 product 테이블을 찾아줘
+
+.Product디렉토리 안에있는 image.png 파일은 프로젝트의 UML구조야 참고해서 구현해줘 또한 Product클래스를 전에말한 product테이블과 연결해줘
+
+상품등록시 사용자
+db의 컬럼 중 status와 created_at을 제외한 모든걸 등록하게 바꿔줘
+
+product_id는 상품명
+title은 제목
+
+상품수정에서는 status값도 바꿀수있도록 수정해줘
+
+SQL DB는 직접구현,
+
+
+Requirements_Analysis 의 README.md파일을 참고해서 본프로젝트의 디렉토리구조를 작성
+
+Project_Structure폴더의 README.md파일에 작성해줘
+2회원/후기/평점 관리기능 이 사용할 데이터베이스는 users,reviews테이블 이고
+3.상품관리 기능 요구사항 분석 기능이 사용할 데이터베이스는 product테이블
+이때 두 기능을 분리해서 각각 mvc 구조로 웹페이지 를 작성하도록 구조를 작성해줘
+
+
+
+잘했는데 통합배치예시의 구조도를
+이디렉토리 전체로 확장해서 그려줘
+
+
+이제 여기서 메인페이지관련 구조도 추가해줘
+1.메인페이지는 mvc구조를 사용하지않고 각 모듈에대한 접근만
+
+3-feature-implementation폴더의 req-021을 추가해서 상품관련 db를구현했다는 항목을 추가해주고 관련소스는 없음 설명에는 xampp mysql환경에서 직접 db구현 또한
+
+또한 별도의 줄을 추가해 백엔드 관련 프롬프트는 docs폴더에 첨부된 이미지의 staruml을 이용해 ai에게 이미지를보여줘서 구현했다는내용을 추가

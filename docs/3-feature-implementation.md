@@ -19,6 +19,21 @@
 | REQ-010 | H2 Database 연동 및 자동 테이블 생성 | src/main/java/hnu/ice/common/DBConnection.java                | ✅ 완성  |
 | REQ-011 | UTF-8 인코딩 처리               | src/main/java/hnu/ice/common/EncodingFilter.java              | ✅ 완성  |
 
+상품 관리 기능(REQ-012 ~ REQ-020) : 20232878 윤광훈
+
+| 요구사항 번호 | 간단 설명                      | 관련 소스                                                         | 구현 여부 |
+| ------- | -------------------------- | ------------------------------------------------------------- | ----- |
+| REQ-012 | 상품 등록 기능                   | src/main/java/kr/hnu/ice/product/controller/ProductController.java | ✅ 완성  |
+| REQ-013 | 상품 수정 기능                   | src/main/java/kr/hnu/ice/product/controller/ProductController.java | ✅ 완성  |
+| REQ-014 | 상품 삭제 기능                   | src/main/java/kr/hnu/ice/product/controller/ProductController.java | ✅ 완성  |
+| REQ-015 | 상품 상세 조회 기능                | src/main/webapp/product/product-detail.jsp                    | ✅ 완성  |
+| REQ-016 | 상품 목록 조회 기능                | src/main/webapp/product/product-list.jsp                      | ✅ 완성  |
+| REQ-017 | 상품 검색 기능                   | src/main/java/kr/hnu/ice/product/dao/ProductDao.java          | ✅ 완성  |
+| REQ-018 | 카테고리 필터링 기능               | src/main/java/kr/hnu/ice/product/dao/ProductDao.java          | ✅ 완성  |
+| REQ-019 | 가격순/최신순 정렬 기능             | src/main/java/kr/hnu/ice/product/dao/ProductDao.java          | ✅ 완성  |
+| REQ-020 | 상품 이미지 업로드 및 저장          | src/main/java/kr/hnu/ice/product/controller/ProductController.java | ✅ 완성  |
+| REQ-021 | 상품 관련 DB 직접 구현            | 없음                                                            | ✅ 완성  |
+
 ---
 
 ## 3.2 구현 내용 설명
@@ -88,3 +103,57 @@
 * 구현 여부: ✅ 완성
 * 관련 소스: EncodingFilter.java
 * 설명: 한글 데이터 처리를 위해 UTF-8 인코딩 필터를 적용하였다.
+
+### REQ-012 상품 등록 기능
+* 구현 여부: ✅ 완성
+* 관련 소스: ProductController.java, ProductDao.java, product-create.jsp
+* 설명: 상품명, 가격, 카테고리, 설명을 입력받아 DB에 저장한다. UUID를 활용한 고유 상품 ID 생성을 지원한다.
+
+### REQ-013 상품 수정 기능
+* 구현 여부: ✅ 완성
+* 관련 소스: ProductController.java, product-edit.jsp
+* 설명: 기존 상품 정보를 불러와 수정할 수 있으며, 거래 상태(판매중/거래완료) 변경 기능을 포함한다.
+
+### REQ-014 상품 삭제 기능
+* 구현 여부: ✅ 완성
+* 관련 소스: ProductController.java, ProductDao.java
+* 설명: 특정 상품 정보를 DB에서 삭제하며, 서버에 저장된 관련 이미지 파일도 함께 삭제하도록 구현하였다.
+
+### REQ-015 상품 상세 조회 기능
+* 구현 여부: ✅ 완성
+* 관련 소스: ProductController.java, product-detail.jsp
+* 설명: 특정 상품의 모든 상세 정보와 등록된 이미지를 확인할 수 있는 전용 페이지를 제공한다.
+
+### REQ-016 상품 목록 조회 기능
+* 구현 여부: ✅ 완성
+* 관련 소스: ProductController.java, product-list.jsp
+* 설명: 전체 등록된 상품을 카드 레이아웃 형태로 출력하며, 페이징 처리를 고려한 리스트 조회를 수행한다.
+
+### REQ-017 상품 검색 기능
+* 구현 여부: ✅ 완성
+* 관련 소스: ProductDao.java, product-search.jsp
+* 설명: 상품명, 카테고리, 설명을 대상으로 키워드 검색을 수행하여 필터링된 결과를 보여준다.
+
+### REQ-018 카테고리 필터링 기능
+* 구현 여부: ✅ 완성
+* 관련 소스: ProductDao.java, ProductController.java
+* 설명: DB에 등록된 카테고리 목록을 동적으로 가져와 드롭다운 필터를 구성하고, 선택된 카테고리 상품만 선별하여 출력한다.
+
+### REQ-019 가격순/최신순 정렬 기능
+* 구현 여부: ✅ 완성
+* 관련 소스: ProductDao.java, ProductController.java
+* 설명: 최신순, 가격 낮은순, 가격 높은순 등 사용자가 선택한 정렬 기준에 따라 SQL 쿼리를 동적으로 생성하여 결과를 제공한다.
+
+### REQ-020 상품 이미지 업로드 및 저장
+* 구현 여부: ✅ 완성
+* 관련 소스: ProductController.java
+* 설명: MultipartConfig를 사용하여 상품 이미지를 서버 특정 경로에 업로드하고, DB에는 해당 경로를 저장하여 상품과 매핑한다.
+
+### REQ-021 상품 관련 DB 직접 구현
+* 구현 여부: ✅ 완성
+* 관련 소스: 없음
+* 설명: XAMPP MySQL 환경에서 상품 관리 기능을 수행하기 위한 전용 데이터베이스와 테이블 스키마를 직접 설계하고 구축하였다.
+
+---
+
+**참고: 본 프로젝트의 상품페이지 백엔드 관련 프롬프트는 `docs` 폴더에 첨부된 StarUML 설계 이미지를 AI에게 제공하여 구조를 분석하게 함으로써 구현 완성도를 높였다.**

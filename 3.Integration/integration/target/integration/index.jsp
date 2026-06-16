@@ -116,26 +116,27 @@
 </head>
 <body>
   <main class="panel">
-    <h1>3.Integeration 통합 페이지</h1>
-    <p>아래 버튼으로 Product와 Review 메인 페이지로 이동할 수 있습니다.</p>
+    <h1>메인페이지</h1>
+  
 
     <section class="links">
       <a class="link" href="http://localhost:8080/product/index.jsp">
         <span class="tag product">Product</span>
         <h2 class="title">1.Product index.jsp</h2>
-        <p class="desc">상품 모듈 메인 페이지로 이동합니다.</p>
+        <p class="desc">상품 페이지 .</p>
       </a>
 
       <a class="link" href="http://localhost:8080/reviews/index.jsp">
         <span class="tag review">Review</span>
         <h2 class="title">2.review index.jsp</h2>
-        <p class="desc">리뷰 모듈 메인 페이지로 이동합니다.</p>
+        <p class="desc">리뷰 페이지.</p>
       </a>
     </section>
 
     <div class="hint">
-      Tomcat 기본 포트(8080) 기준 링크입니다. 포트나 컨텍스트 경로가 다르면 주소를 변경해 주세요.
     </div>
   </main>
 </body>
 </html>
+
+
